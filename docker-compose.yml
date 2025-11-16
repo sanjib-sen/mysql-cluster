@@ -25,14 +25,14 @@ services:
     restart: "no"
 
   router:
-    env_file: .env
-    image: mysql/mysql-router:8.0
-    environment:
-      - MYSQL_USER=root
-      - MYSQL_PASSWORD=${MYSQL_ROOT_PASSWORD}
-    ports:
-      - "6446:6446"
-    depends_on:
-      - mysql
-      - script
+    build:
+      context: .
+      dockerfile: Dockerfile.router
+    network_mode: host
     restart: unless-stopped
+    env_file: .env
+    depends_on:
+      script:
+        condition: service_completed_successfully
+      mysql:
+        condition: service_healthy
