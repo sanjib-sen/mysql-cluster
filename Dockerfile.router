@@ -1,0 +1,13 @@
+FROM mysql:9.5
+
+# Install MySQL Router
+RUN microdnf install -y mysql-router && microdnf clean all
+
+# Create router directory
+RUN mkdir -p /var/lib/mysqlrouter
+
+COPY scripts/router-bootstrap.sh /usr/local/bin/
+RUN chmod +x /usr/local/bin/router-bootstrap.sh
+
+ENTRYPOINT ["/usr/local/bin/router-bootstrap.sh"]
+
